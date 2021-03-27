@@ -1,0 +1,141 @@
+//*
+//*** CONFIG
+//*
+
+git config user.name "Your name"
+git config user.email your email
+
+ git config --global core.editor "path to run file editor"
+
+// --- for vscode - need additional setup https://code.visualstudio.com/docs/editor/versioncontrol#_vs-code-as-git-editor	
+git config --global core.editor "code --wait"
+
+// add alias
+git config --global alias.co checkout
+
+// attributes
+git help attributes
+
+// check matching rules for file from file gitignore
+git check-ignore -v "path or path/file or file"
+
+
+//*
+//*** BASIC
+//*
+
+ create mode 100644 // === 100 type of file, 644 file permission
+
+// detail of commit
+ git show [can be or not num of commit last is by default ] --pretty=fuller 
+ git show --help // === detail of command
+
+// unstage the changes (locally from index)
+git reset HEAD <file, folder>
+
+// delete file from index
+git rm <flags> <filename or with path> // by default removed from index state and WD (working directory)
+    -f = if we need remove file form the WD (by default)
+    --cached  removed from index but well leave in the WD 
+
+
+
+
+//*
+//*** BRANCHES
+//*
+
+// move separate changes from one branch to another
+// for example, doing something on the main branch after some work, we want to push the changes to another branch and
+// rollback the main branch to a separate commit
+// if shortly we need to create new branch and current commit will point to this new branch and master branch move to needed (previous) commit
+git checkout -B <what branchName> <commit id or branchName>
+git branch -f <what branchName> <commit id or branchName> --- the same command
+
+git checkout -f <branch name> --- switch to another branch, excluding saving changes, if we dont set branchName or HEAD (ref to the current branch)
+we update branch to initial (last committed) state
+
+//*
+//*** HISTORY and LOGGER 
+//*
+
+git show <commit or number or ref like "HEAD or shorten version @" by default the last commit, each Tilda ~ it's step to parent commit>
+example: git show HEAD~~~  ___equal___  git show HEAD~2  ___equal___ git show @~2
+git show @~2:index.html --- show source file at current commit
+git show :index.html --- show current indexed state file
+git show :/<by commit matches substring>
+
+
+// show full history (commit, merge, checkout...)
+git reflog 
+
+//*
+//*** TAGS
+//*
+
+git tags <name of tag> <commit or banch-commit that branch refers> - create tag wich refers to commit
+git tags - show all tags
+git tags <-n> - show message from commit which tag refers
+git branch <branchName> <tag> // create branch started from commit that tag refers
+git tag -a -m "message" <tagName> <commit or banch-coomit that branch refers>  - -a - annotation - add message to tag
+git tag -d <tagName> - delete tag
+
+//*
+//*** COMMIT
+//*
+
+git commit -c <commit or ref ORIG_HEAD> --- -c copy detail from commit WITHOUT modify
+git commit -C <commit or ref ORIG_HEAD> --- -c copy detail from commit WITH modify
+
+
+//*
+//*** RESET
+//*
+
+// reset state of files
+git reset <flags> <commit or ref> --- git reset --hard @~ (@ === HEAD ref, ~ one commit early === parent)
+<commit or ref> --- sets for moving HEAD
+--hard --- removed from WD, index, repo changes
+--soft --- only from repo
+--keep --- return to commit but try to save untracked changes where its possible
+// rewrite current commit 
+git commit --amend --- first need to change WD after it does commit
+
+git reset --merge --- cancels last merge 
+git reset --help --- documentation
+
+
+
+//*
+//*** CLEAN
+//*
+git clean -dxf --- clear all (untracked) files, directories and files specified in gitignore (d - directory, x - gitignore, f - force)
+
+
+
+
+//*
+//*** VIEW
+//*
+
+show difference between
+git diff --- WD (unindexed changes) with Local Repo
+git diff HEAD (@) --- WD and indexed with Local Repo
+git diff --cached --- indexed with Local Repo
+git diff <commit or branch1>(space or two dots ..)<commit or branch2> --- diff between commits
+git diff <commit or branch1>...<commit or branch2> --- what was changed in the <commit or branch2> according to the <commit or branch1>
+
+
+
+//*
+//*** SHORTCUTS AND FEATURES
+//*
+
+//***** Below commands reset tracked files
+git checkout <commit> <file> --- get (update WD) current file from the specific commit
+
+// working if changes are not committed
+git checkout -f --- reset changes from the current branch to initial state (last commit) 
+
+// cancel merge and try to save WD changes (unindexed)
+git merge --abort or git reset --merge 
